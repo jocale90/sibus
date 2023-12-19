@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\RotativosController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +18,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('first');
 });
+
+
+Route::get('/test-db-connection', function () {
+    try {
+        DB::connection()->getPdo();
+        return "Conexión exitosa a la base de datos.";
+    } catch (\Exception $e) {
+        return "Error al conectar a la base de datos: " . $e->getMessage();
+    }
+});
+
+Route::get('rotativos' ,[RotativosController::class, 'rotativos'])->name('rotativos');
+

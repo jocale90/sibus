@@ -18,6 +18,9 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item active">
+          <a class="nav-link" href="#">Rotativas</a>
+        </li>
+      <!--   <li class="nav-item active">
           <a class="nav-link" href="#">Encomiendas</a>
         </li>
         <li class="nav-item">
@@ -34,7 +37,7 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">Maestros</a>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>
@@ -51,9 +54,9 @@
           <label for="rutaSelect" class="col-sm-3 col-form-label">Selecciona la ruta:</label>
           <div class="col-sm-9">
             <select class="form-control form-control-sm" id="rutaSelect">
-              <option value="ruta1">Ruta 1</option>
-              <option value="ruta2">Ruta 2</option>
-              <option value="ruta3">Ruta 3</option>
+                  @foreach($rutas as $ruta)
+                      <option value="{{ $ruta->idruta }}">{{ $ruta->nombreruta }} </option>
+                  @endforeach
             </select>
           </div>
         </div>
@@ -73,9 +76,9 @@
           <label for="busSelect" class="col-sm-3 col-form-label">Selecciona el bus:</label>
           <div class="col-sm-9">
             <select class="form-control form-control-sm" id="busSelect">
-              <option value="bus1">Bus 1</option>
-              <option value="bus2">Bus 2</option>
-              <option value="bus3">Bus 3</option>
+                  @foreach($buses as $bus)
+                      <option value="{{ $bus->idbus }}">{{ $bus->nbus }}  {{ $bus->patente }}</option>
+                  @endforeach
             </select>
           </div>
         </div>
@@ -90,9 +93,9 @@
           <label for="conductor1" class="col-sm-3 col-form-label">Conductor 1:</label>
           <div class="col-sm-9">
             <select class="form-control form-control-sm" id="conductor1">
-              <option value="conductor1">Conductor 1</option>
-              <option value="conductor2">Conductor 2</option>
-              <option value="conductor3">Conductor 3</option>
+                @foreach($conductores as $conductor)
+                    <option value="{{ $conductor->idconductor }}">{{ $conductor->nombre }}</option>
+                @endforeach
             </select>
           </div>
         </div>
@@ -100,9 +103,9 @@
           <label for="conductor2" class="col-sm-3 col-form-label">Conductor 2:</label>
           <div class="col-sm-9">
             <select class="form-control form-control-sm" id="conductor2">
-              <option value="conductor1">Conductor 1</option>
-              <option value="conductor2">Conductor 2</option>
-              <option value="conductor3">Conductor 3</option>
+                @foreach($conductores as $conductor)
+                    <option value="{{ $conductor->idconductor }}">{{ $conductor->nombre }}</option>
+                @endforeach
             </select>
           </div>
         </div>
@@ -110,9 +113,9 @@
           <label for="auxiliar" class="col-sm-3 col-form-label">Auxiliar:</label>
           <div class="col-sm-9">
             <select class="form-control form-control-sm" id="auxiliar">
-              <option value="auxiliar1">Auxiliar 1</option>
-              <option value="auxiliar2">Auxiliar 2</option>
-              <option value="auxiliar3">Auxiliar 3</option>
+                @foreach($conductores_a as $conductor)
+                    <option value="{{ $conductor->idconductor }}">{{ $conductor->nombre }}</option>
+                @endforeach
             </select>
           </div>
         </div>
