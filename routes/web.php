@@ -16,7 +16,7 @@ use App\Http\Controllers\RotativosController;
 */
 
 Route::get('/', function () {
-    return view('first');
+    return view('welcome');
 });
 
 
@@ -29,5 +29,6 @@ Route::get('/test-db-connection', function () {
     }
 });
 
-Route::get('rotativos' ,[RotativosController::class, 'rotativos'])->name('rotativos');
+Route::get('rotativos'        ,[RotativosController::class, 'rotativos'])->name('rotativos');
+Route::get('ListadoIdaVuelta' ,[RotativosController::class, 'ListadoIdaVuelta'])->name('ListadoIdaVuelta');
 

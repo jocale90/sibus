@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Rutas extends Model
 {
     use HasFactory;
+    protected $connection = 'sqlsrv2';
     protected $table = 'vp_rutas';
 	protected $fillable = [
         "idruta",

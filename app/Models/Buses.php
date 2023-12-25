@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Buses extends Model
 {
     use HasFactory;
+    protected $connection = 'sqlsrv2';
     protected $table = 'vp_buses';
 	protected $fillable = [
         "idbus",
