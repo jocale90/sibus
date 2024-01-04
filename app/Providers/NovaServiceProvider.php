@@ -2,9 +2,22 @@
 
 namespace App\Providers;
 
+use App\Models\Conductores_a;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Nova\Nova;
 use Laravel\Nova\NovaApplicationServiceProvider;
+use Illuminate\Http\Request;
+use Laravel\Nova\Dashboards\Main;
+use Laravel\Nova\Menu\Menu;
+use Laravel\Nova\Menu\MenuItem;
+use Laravel\Nova\Menu\MenuSection;
+use Laravel\Nova\Http\Requests\NovaRequest;
+
+use App\Nova\Buses;
+use App\Nova\Conductores;
+use App\Nova\Rutas;
+use App\Nova\User;
+use Illuminate\Support\Facades\Route;
 
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
@@ -15,7 +28,27 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function boot()
     {
-        parent::boot();
+            parent::boot();
+
+            Nova::mainMenu(function (Request $request) {
+                return [
+
+                    MenuSection::make('Gestiones', [
+                        MenuItem::resource(User::class), 
+                        MenuItem::externalLink('Rotativos', 'http://localhost:8000/rotativos'),
+                    ])->icon('cog')->collapsable(),
+
+                    MenuSection::make('Mantenedores', [
+                        MenuItem::resource(Buses::class), 
+                        MenuItem::resource(Conductores::class), 
+                        MenuItem::resource(Rutas::class), 
+                    ])->icon('cog')->collapsable(),
+
+                    
+
+                ];
+            });
+
     }
 
     /**

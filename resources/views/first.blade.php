@@ -23,6 +23,29 @@
             <a class="nav-link" href="#">Rotativas</a>
           </li>
         </ul>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">
+                  @foreach($infosibus as $info)
+                     EMPRESA {{ $info->nombre }}
+                  @endforeach
+            </a>
+          </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="infosibusDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Empresas 
+              </a>
+              <div class="dropdown-menu" aria-labelledby="infosibusDropdown">
+                  @foreach($sib_empresas_buses as $info)
+                      <a class="dropdown-item" href="#">{{ $info->nombre }}</a>
+                  @endforeach
+              </div>
+          </li>
+        </ul>
+      
       </div>
     </div>
   </nav>
@@ -42,18 +65,19 @@
                 <option value="{{ $ruta->idruta }}">{{ $ruta->nombreruta }} </option>
                 @endforeach
               </select>
+              <input type="hidden" name="idempresa" id="idempresa" value="{{ $idEmpresaCon }}" >
             </div>
           </div>
           <div class="form-group row">
             <label for="fechaInicio" class="col-sm-3 col-form-label">Desde:</label>
             <div class="col-sm-9">
-              <input type="date" class="form-control form-control-sm" id="fechaInicio">
+              <input type="date" class="form-control form-control-sm" id="fechaida">
             </div>
           </div>
           <div class="form-group row">
             <label for="fechaFin" class="col-sm-3 col-form-label">Hasta:</label>
             <div class="col-sm-9">
-              <input type="date" class="form-control form-control-sm" id="fechaFin">
+              <input type="date" class="form-control form-control-sm" id="fechavuelta">
             </div>
           </div>
           <div class="form-group row">
@@ -144,26 +168,7 @@
             </tr>
           </thead>
           <tbody style="color: black; background-color: white;">
-            <tr>
-              <td>1</td>
-              <td>08:00</td>
-              <td>10:30</td>
-              <td>Bus A</td>
-              <td>Juan Pérez</td>
-              <td>Maria Rodríguez</td>
-              <td>Pedro Gómez</td>
-              <td>Observaciones...</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>11:00</td>
-              <td>13:45</td>
-              <td>Bus B</td>
-              <td>Luis González</td>
-              <td>Ana Martínez</td>
-              <td>Sofía López</td>
-              <td>Detalles...</td>
-            </tr>
+
           </tbody>
         </table>
       </div>
@@ -182,26 +187,7 @@
             </tr>
           </thead>
           <tbody style="color: black; background-color: white;">
-            <tr>
-              <td>1</td>
-              <td>09:30</td>
-              <td>12:15</td>
-              <td>Bus C</td>
-              <td>Roberto Sánchez</td>
-              <td>Elena Fernández</td>
-              <td>David Pérez</td>
-              <td>Información...</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>14:00</td>
-              <td>16:45</td>
-              <td>Bus D</td>
-              <td>Marta López</td>
-              <td>Pablo Ruiz</td>
-              <td>Carlos Martín</td>
-              <td>Comentarios...</td>
-            </tr>
+
           </tbody>
         </table>
       </div>
@@ -217,19 +203,27 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <script>
     let fechaActual = new Date().toISOString().split('T')[0];
-    document.getElementById('fechaInicio').value = fechaActual;
-    document.getElementById('fechaFin').value = fechaActual;
+    document.getElementById('fechaida').value = fechaActual;
+    document.getElementById('fechavuelta').value = fechaActual;
   </script>
   
 <script>
 $(document).ready(function() {
   $('#rutaSelect').change(function() {
     var rutaSeleccionada = $(this).val();
+    var empresaactual    = $("#idempresa").val();
+    var fechaida    = $("#fechaida").val();
+    var fechavuelta    = $("#fechavuelta").val();
 
     $.ajax({
       url: "{{ route('ListadoIdaVuelta') }}",
       method: 'get',
-      data: { ruta: rutaSeleccionada },
+      data: { ruta: rutaSeleccionada,
+              empresa: empresaactual,
+              fechaida: fechaida,
+              fechavuelta: fechavuelta,
+            },
+      
       success: function(data) {
         $('#tabla1 tbody').empty(); 
         $.each(data.tabla1, function(index, row) {
@@ -261,6 +255,7 @@ $(document).ready(function() {
           $('#tabla2 tbody').append(newRow);
         });
       },
+      
       error: function(error) {
         console.error('Error:', error);
       }
