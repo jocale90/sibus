@@ -71,15 +71,34 @@ class RotativosController extends Controller
         $empresa     = $request->get("empresa");
         $fechaIda    = $request->get("fechaida");
         $fechaVuelta = $request->get("fechavuelta");
+        $viajecorto  = 0;
 
         /* dd($ruta,$empresa,$fechaIda,$fechaVuelta); */
 
         $rutas_ida    = DB::select("SELECT * FROM [dbo].[sib_listado_servicio_rotativa](?, ?, ?, ?)", array($fechaIda, $fechaVuelta, $ruta, $empresa));
         $rutas_vuelta = DB::select("SELECT * FROM [dbo].[sib_listado_servicio_rotativa_vuelta](?, ?, ?, ?)", array($fechaIda, $fechaVuelta, $ruta, $empresa));
-    
+
+        foreach ($rutas_ida as $value) {
+            $tiempo = $value->tiempo_viaje;
+            if ($tiempo < 300) {
+                $viajecorto = 1;
+            } else {
+                $viajecorto  = 0;
+            }
+        }
+
         return response()->json([
             'tabla1' => $rutas_ida,
-            'tabla2' => $rutas_vuelta
+            'tabla2' => $rutas_vuelta,
+            'viajecorto' => $viajecorto
         ]);
+    }
+
+    public function logout()
+    {
+        
+        Auth::logout();
+        return redirect('/nova/login');
+
     }
 }

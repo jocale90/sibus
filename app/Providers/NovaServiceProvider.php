@@ -49,6 +49,8 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
                 ];
             });
 
+            Nova::initialPath('/resources/users');
+
     }
 
     /**
@@ -110,6 +112,6 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function register()
     {
-        //
+        /* \Laravel\Nova\Nova::$initialPath = 'rotativos'; */ //update it to any valid nova path
     }
 }

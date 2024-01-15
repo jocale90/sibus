@@ -30,5 +30,6 @@ Route::get('/test-db-connection', function () {
 });
 
 Route::get('rotativos'        ,[RotativosController::class, 'rotativos'])->name('rotativos');
+Route::get('logout'           ,[RotativosController::class, 'logout'])->name('logout');
 Route::get('ListadoIdaVuelta' ,[RotativosController::class, 'ListadoIdaVuelta'])->name('ListadoIdaVuelta');
 

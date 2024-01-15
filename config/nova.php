@@ -48,6 +48,8 @@ return [
 
     'domain' => env('NOVA_DOMAIN_NAME', null),
 
+
+
     /*
     |--------------------------------------------------------------------------
     | Nova Path
@@ -150,6 +152,17 @@ return [
 
     'currency' => 'USD',
 
+
+    'brand' => [
+        'logo' => public_path('img/sibus.svg'),
+
+/*         'colors' => [
+            "400" => "24, 182, 155, 0.5",
+            "500" => "24, 182, 155",
+            "600" => "24, 182, 155, 0.75",
+        ] */
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Branding
@@ -160,19 +173,12 @@ return [
     | be displayed within the Nova interface. This logo value must be
     | the absolute path to an SVG logo within the local filesystem.
     |
-    */
-
-    // 'brand' => [
-    //     'logo' => resource_path('/img/example-logo.svg'),
-
-    //     'colors' => [
-    //         "400" => "24, 182, 155, 0.5",
-    //         "500" => "24, 182, 155",
-    //         "600" => "24, 182, 155, 0.75",
-    //     ]
-    // ],
-
     /*
+    
+
+
+
+    
     |--------------------------------------------------------------------------
     | Nova Action Resource Class
     |--------------------------------------------------------------------------
