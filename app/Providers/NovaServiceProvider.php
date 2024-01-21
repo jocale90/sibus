@@ -35,7 +35,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
                     MenuSection::make('Gestiones', [
                         MenuItem::resource(User::class), 
-                        MenuItem::externalLink('Rotativos', 'http://localhost:8000/rotativos'),
+                        MenuItem::externalLink('Rotativos', 'http://ec2-18-118-186-207.us-east-2.compute.amazonaws.com/rotativos'),
                     ])->icon('cog')->collapsable(),
 
                     MenuSection::make('Mantenedores', [

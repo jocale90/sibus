@@ -13,6 +13,8 @@ use App\Models\sib_empresas_buses;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Ui\Presets\React;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Redirect;
 
 class RotativosController extends Controller
 {
@@ -97,8 +99,9 @@ class RotativosController extends Controller
     public function logout()
     {
         
-        Auth::logout();
-        return redirect('/nova/login');
+        Session::flush();
+        $url = "http://ec2-18-118-186-207.us-east-2.compute.amazonaws.com/nova/login";
+        return Redirect::to($url);
 
     }
 }

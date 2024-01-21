@@ -230,6 +230,22 @@
     </div>
   </div>
 
+  
+  <div class="modal" id="modalmensaje" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Seleccione una ruta</h5>
+        </div>
+        <div class="modal-body text-center">
+            <div>Seleccione una ruta para realizar la busqueda</div>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal" id="miModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -256,76 +272,145 @@
   </script>
   
 <script>
-$(document).ready(function() {
-  $("#botonbuscar").click(function() {
+$(document).ready(function()
+{
 
 
-    $("#miModal").modal("show");
-    var rutaSeleccionada = $("#rutaSelect").val();
-    var empresaactual    = $("#idempresa").val();
-    var fechaida    = $("#fechaida").val();
-    var fechavuelta    = $("#fechavuelta").val();
-
-    $.ajax({
-      url: "{{ route('ListadoIdaVuelta') }}",
-      method: 'get',
-      data: { ruta: rutaSeleccionada,
-              empresa: empresaactual,
-              fechaida: fechaida,
-              fechavuelta: fechavuelta,
-            },
-      
-      success: function(data) {
+        $('.checkbox-registro').on('click', function ()
+        {
+            // Aquí puedes realizar acciones adicionales al hacer clic en el checkbox
+            alert('Checkbox clickeado');
+            
+            // También puedes llamar a la función verificarChoques si es necesario
+            /* verificarChoques($(this)); */
+        });
 
 
-        $("#miModal").modal("hide");
 
-        if (data.viajecorto === 1) {
-            $('#conductor2').prop('disabled', true);
+        /*function verificarChoques(checkbox)
+        {
+            // Obtiene la fila actual del checkbox
+            var filaActual = checkbox.closest('tr');
+
+            // Obtiene la fecha y hora del registro actual
+            var fechaSalida = filaActual.find('.fecha-salida').text();
+            var horaSalida = filaActual.find('.hora-salida').text();
+            var horaLlegada = filaActual.find('.hora-llegada').text();
+
+            // Compara con otros registros solo en la misma tabla
+            filaActual.siblings().each(function () {
+                var otraFechaSalida = $(this).find('.fecha-salida').text();
+                var otraHoraSalida = $(this).find('.hora-salida').text();
+                var otraHoraLlegada = $(this).find('.hora-llegada').text();
+
+                // Lógica para verificar choques de fechas y horas
+                if (fechaSalida === otraFechaSalida) {
+                    if ((horaSalida <= otraHoraLlegada && horaLlegada >= otraHoraSalida) ||
+                        (otraHoraSalida <= horaLlegada && otraHoraLlegada >= horaSalida)) {
+                        alert('¡Choque de fechas y horas en la misma tabla!');
+                        // Aquí puedes realizar las acciones que necesites cuando hay un choque
+                    }
+                }
+            });
         }
 
-
-        $('#tabla1 tbody').empty(); 
-        $.each(data.tabla1, function(index, row) {
-          var newRow = '<tr>' +
-              '<td><input type="checkbox"></td>' +
-              '<td>' + row.idservicio + '</td>' +
-              '<td>' + row.fechasalida + '</td>' +
-              '<td>' + row.horasalida + '</td>' +
-              '<td>' + row.horallegada + '</td>' +
-              '<td>' + row.bus + '</td>' +
-              '<td>' + row.conductor1 + '</td>' +
-              '<td>' + row.conductor2 + '</td>' +
-              '<td>' + row.auxiliar + '</td>' +
-              '<td></td>' +
-            '</tr>';
-          $('#tabla1 tbody').append(newRow);
+        // Selecciona todos los checkboxes con la clase 'checkbox-registro'
+          $(".checkbox-registro").click(function() {
+            alert("se hizo click");
+            return false;
+            verificarChoques($(this));
         });
+      */
 
-        $('#tabla2 tbody').empty(); 
-        $.each(data.tabla2, function(index, row) {
-          var newRow = '<tr>' +
-              '<td><input type="checkbox"></td>' +
-              '<td>' + row.idservicio + '</td>' +
-              '<td>' + row.fechasalida + '</td>' +
-              '<td>' + row.horasalida + '</td>' +
-              '<td>' + row.horallegada + '</td>' +
-              '<td>' + row.bus + '</td>' +
-              '<td>' + row.conductor1 + '</td>' +
-              '<td>' + row.conductor2 + '</td>' +
-              '<td>' + row.auxiliar + '</td>' +
-              '<td></td>' +
-            '</tr>';
-          $('#tabla2 tbody').append(newRow);
-        });
-      },
-      
-      error: function(error) {
-        console.error('Error:', error);
-      }
-    });
-  });
+
+          $("#botonbuscar").click(function()
+          {
+
+            if ($("#rutaSelect").val() < 1)
+            {
+                $("#modalmensaje").modal("show");
+                return false;
+            }
+            
+            $("#miModal").modal("show");
+            
+            var rutaSeleccionada = $("#rutaSelect").val();
+            var empresaactual    = $("#idempresa").val();
+            var fechaida    = $("#fechaida").val();
+            var fechavuelta    = $("#fechavuelta").val();
+
+            $.ajax({
+              url: "{{ route('ListadoIdaVuelta') }}",
+              method: 'get',
+              data: { ruta: rutaSeleccionada,
+                      empresa: empresaactual,
+                      fechaida: fechaida,
+                      fechavuelta: fechavuelta,
+                    },
+              
+              success: function(data) {
+
+
+                $("#miModal").modal("hide");
+
+                if (data.viajecorto === 1) {
+                    $('#conductor2').prop('disabled', true);
+                }
+
+
+                $('#tabla1 tbody').empty(); 
+                $.each(data.tabla1, function(index, row) {
+                  var newRow = '<tr>' +
+                      '<td><input type="checkbox" class="checkbox-registro"></td>' +
+                      '<td>' + row.idservicio + '</td>' +
+                      '<td class="fecha-salida">' + row.fechasalida + '</td>' +
+                      '<td class="hora-salida">' + row.horasalida + '</td>' +
+                      '<td class="hora-llegada">' + row.horallegada + '</td>' +
+                      '<td>' + row.bus + '</td>' +
+                      '<td>' + row.conductor1 + '</td>' +
+                      '<td>' + row.conductor2 + '</td>' +
+                      '<td>' + row.auxiliar + '</td>' +
+                      '<td></td>' +
+                    '</tr>';
+                  $('#tabla1 tbody').append(newRow);
+                });
+
+                $('#tabla2 tbody').empty(); 
+                $.each(data.tabla2, function(index, row) {
+                  var newRow = '<tr>' +
+                      '<td><input type="checkbox" class="checkbox-registro"></td>' +
+                      '<td>' + row.idservicio + '</td>' +
+                      '<td class="fecha-salida">' + row.fechasalida + '</td>' +
+                      '<td class="hora-salida">' + row.horasalida + '</td>' +
+                      '<td class="hora-llegada">' + row.horallegada + '</td>' +
+                      '<td>' + row.bus + '</td>' +
+                      '<td>' + row.conductor1 + '</td>' +
+                      '<td>' + row.conductor2 + '</td>' +
+                      '<td>' + row.auxiliar + '</td>' +
+                      '<td></td>' +
+                    '</tr>';
+                  $('#tabla2 tbody').append(newRow);
+                });
+              },
+              
+              error: function(error) {
+                console.error('Error:', error);
+              }
+            
+            
+            });
+          });
+
+
+
 });
+
+
+
+
+
+
+
 
 </script>
 
