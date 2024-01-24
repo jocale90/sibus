@@ -19,6 +19,8 @@ use App\Nova\Rutas;
 use App\Nova\User;
 use Illuminate\Support\Facades\Route;
 
+
+
 class NovaServiceProvider extends NovaApplicationServiceProvider
 {
     /**
@@ -35,7 +37,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
 
                     MenuSection::make('Gestiones', [
                         MenuItem::resource(User::class), 
-                        MenuItem::externalLink('Rotativos', 'http://ec2-18-118-186-207.us-east-2.compute.amazonaws.com/rotativos'),
+                        MenuItem::externalLink('Rotativos', env('APP_URL') . 'rotativos'),
                     ])->icon('cog')->collapsable(),
 
                     MenuSection::make('Mantenedores', [

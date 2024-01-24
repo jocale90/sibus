@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\RotativosController;
+use App\Http\Controllers\CompareController;
 
 /*
 |--------------------------------------------------------------------------
@@ -29,7 +30,8 @@ Route::get('/test-db-connection', function () {
     }
 });
 
-Route::get('rotativos'        ,[RotativosController::class, 'rotativos'])->name('rotativos');
-Route::get('logout'           ,[RotativosController::class, 'logout'])->name('logout');
-Route::get('ListadoIdaVuelta' ,[RotativosController::class, 'ListadoIdaVuelta'])->name('ListadoIdaVuelta');
+Route::get('rotativos'         ,[RotativosController::class, 'rotativos'])->name('rotativos');
+Route::get('logout'            ,[RotativosController::class, 'logout'])->name('logout');
+Route::get('ListadoIdaVuelta'  ,[RotativosController::class, 'ListadoIdaVuelta'])->name('ListadoIdaVuelta');
+Route::post('updateservice'    ,[CompareController::class, 'updateservice'])->name('updateservice');
 

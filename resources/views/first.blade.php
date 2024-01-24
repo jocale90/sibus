@@ -7,6 +7,7 @@
   <title>Sibus - System</title>
   <!-- Enlace al archivo CSS de Bootstrap -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body style="background-color: #CCCCCC;">
@@ -97,12 +98,12 @@
             </div>
           </div>
 
-        </form>
+        
       </div>
       <div class="col-md-6 text-center">
         <!-- Formulario en la segunda columna -->
         <p>Selecciona el personal</p>
-        <form>
+        
           <div class="form-group row">
             <label for="conductor1" class="col-sm-3 col-form-label">Conductor 1:</label>
             <div class="col-sm-9">
@@ -145,20 +146,16 @@
         </form>
       </div>
     </div>
+    
+    
+    
     <div class="form-group row">
       <div class="col-sm-12">
-        <button type="button" class="btn btn-sm btn-success">Guardar</button>
-        <button type="button" class="btn btn-sm btn-warning">Editar</button>
-        <button type="button" class="btn btn-sm btn-danger">Borrar</button>
-        <button type="button" class="btn btn-sm btn-light">Limpiar</button>
-        <button id="botonbuscar" type="button" class="btn btn-sm btn-info">Buscar</button>
-        
-        <!-- <button type="button" class="btn btn-sm btn-info">Asistencia RRHH</button>
-        <button type="button" class="btn btn-sm btn-info">Disponilibilidad Bus</button>
-        <button type="button" class="btn btn-sm btn-info">Informe Ejec. Buses</button>
-        <button type="button" class="btn btn-sm btn-success">Dia fuera de servicio</button>
-        <button type="button" class="btn btn-sm btn-success">Dia libre</button> -->
-
+        <button id="botonguardar" type="button" class="btn btn-sm btn-success">Guardar</button>
+        <button type="button"     class="btn btn-sm btn-warning">Editar</button>
+        <button type="button"     class="btn btn-sm btn-danger">Borrar</button>
+        <button type="button"     class="btn btn-sm btn-light">Limpiar</button>
+        <button id="botonbuscar"  type="button" class="btn btn-sm btn-info">Buscar</button>
       </div>
     </div>
 
@@ -230,6 +227,36 @@
     </div>
   </div>
 
+  <div class="modal" id="updated" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Registros guardados</h5>
+        </div>
+        <div class="modal-body text-center">
+                <p>Registro guardado exitosamente</p>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="updatederror" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Proceso no registrado</h5>
+        </div>
+        <div class="modal-body text-center">
+                <p>Los bloques de horas seleccionados no son compatibles, por favor validar</p>
+        </div>
+        <div class="modal-footer">
+        </div>
+      </div>
+    </div>
+  </div>
+
   
   <div class="modal" id="modalmensaje" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -275,54 +302,11 @@
 $(document).ready(function()
 {
 
-
-        $('.checkbox-registro').on('click', function ()
-        {
-            // Aquí puedes realizar acciones adicionales al hacer clic en el checkbox
-            alert('Checkbox clickeado');
-            
-            // También puedes llamar a la función verificarChoques si es necesario
-            /* verificarChoques($(this)); */
-        });
-
-
-
-        /*function verificarChoques(checkbox)
-        {
-            // Obtiene la fila actual del checkbox
-            var filaActual = checkbox.closest('tr');
-
-            // Obtiene la fecha y hora del registro actual
-            var fechaSalida = filaActual.find('.fecha-salida').text();
-            var horaSalida = filaActual.find('.hora-salida').text();
-            var horaLlegada = filaActual.find('.hora-llegada').text();
-
-            // Compara con otros registros solo en la misma tabla
-            filaActual.siblings().each(function () {
-                var otraFechaSalida = $(this).find('.fecha-salida').text();
-                var otraHoraSalida = $(this).find('.hora-salida').text();
-                var otraHoraLlegada = $(this).find('.hora-llegada').text();
-
-                // Lógica para verificar choques de fechas y horas
-                if (fechaSalida === otraFechaSalida) {
-                    if ((horaSalida <= otraHoraLlegada && horaLlegada >= otraHoraSalida) ||
-                        (otraHoraSalida <= horaLlegada && otraHoraLlegada >= horaSalida)) {
-                        alert('¡Choque de fechas y horas en la misma tabla!');
-                        // Aquí puedes realizar las acciones que necesites cuando hay un choque
-                    }
-                }
-            });
-        }
-
-        // Selecciona todos los checkboxes con la clase 'checkbox-registro'
-          $(".checkbox-registro").click(function() {
-            alert("se hizo click");
-            return false;
-            verificarChoques($(this));
-        });
-      */
-
-
+          
+  
+          let arrayDatosIda = []
+          let arrayDatosVuelta = []
+  
           $("#botonbuscar").click(function()
           {
 
@@ -402,6 +386,171 @@ $(document).ready(function()
           });
 
 
+/*           $(document).on('click', '#tabla1 .checkbox-registro, #tabla2 .checkbox-registro', function ()
+          {
+
+                var $row = $(this).closest('tr');
+                var idservicio  = $row.find('td:eq(1)').text(); // Adjust the index based on the column you want
+                var fechasalida = $row.find('td:eq(2)').text(); // Adjust the index based on the column you want
+                var horasalida  = $row.find('td:eq(3)').text(); // Adjust the index based on the column you want
+                var horallegada = $row.find('td:eq(4)').text(); // Adjust the index based on the column you want
+
+                var objetoDatos = {
+                  idservicio: idservicio,
+                  fechasalida: fechasalida,
+                  horasalida: horasalida,
+                  horallegada: horallegada
+                };
+
+                arraydatos.push(objetoDatos); // Agrega el objeto al array
+                console.log(arraydatos);
+          }); */
+
+
+            $(document).on('click', '#tabla1 .checkbox-registro, #tabla2 .checkbox-registro', function ()
+            {
+              
+                var $row = $(this).closest('tr');
+                var $table = $row.closest('table');
+                var tableId = $table.attr('id');
+                var idservicio  = $row.find('td:eq(1)').text(); 
+                var fechasalida = $row.find('td:eq(2)').text(); 
+                var horasalida  = $row.find('td:eq(3)').text(); 
+                var horallegada = $row.find('td:eq(4)').text();
+
+
+              if (this.checked)
+              {
+
+                if (tableId === 'tabla1')
+                {
+                    var objetoDatosIda = {
+                      idservicio: idservicio,
+                      fechasalida: fechasalida,
+                      horasalida: horasalida,
+                      horallegada: horallegada
+                    };
+                    arrayDatosIda.push(objetoDatosIda); 
+                    console.log(arrayDatosIda);
+                    
+                }
+                else if (tableId === 'tabla2')
+                {
+                    var objetoDatosVuelta = {
+                      idservicio: idservicio,
+                      fechasalida: fechasalida,
+                      horasalida: horasalida,
+                      horallegada: horallegada
+                    };
+                    arrayDatosVuelta.push(objetoDatosVuelta); 
+                    console.log(arrayDatosVuelta);
+                }
+
+              }
+              else
+              {
+                      
+                      if (tableId === 'tabla1')
+                      {
+                        var index = arrayDatosIda.findIndex(function (element)
+                        {
+                          return element.idservicio === idservicio;
+                        });
+
+                        if (index !== -1) {
+                          arrayDatosIda.splice(index, 1);
+                        }
+
+                        console.log(arrayDatosIda);
+                      }
+                      else if (tableId === 'tabla2')
+                      {
+                        var index = arrayDatosVuelta.findIndex(function (element)
+                        {
+                          return element.idservicio === idservicio;
+                        });
+
+                        if (index !== -1) {
+                          arrayDatosVuelta.splice(index, 1);
+                        }
+
+                        console.log(arrayDatosVuelta);
+                      }
+
+              }
+
+            });
+
+
+          $("#botonguardar").click(function()
+          {
+            
+            
+            if ($("#rutaSelect").val() < 1)
+            {
+                $("#modalmensaje").modal("show");
+                return false;
+            }
+            
+            $("#miModal").modal("show");
+
+
+            var rutaSeleccionada = $("#rutaSelect").val();
+            var empresaactual    = $("#idempresa").val();
+            var fechaida         = $("#fechaida").val();
+            var fechavuelta      = $("#fechavuelta").val();
+            var busSelect        = $("#busSelect").val();
+            var conductor1       = $("#conductor1").val();
+            var conductor2       = $("#conductor2").val();
+            var auxiliar         = $("#auxiliar").val();
+            var _token           = $('meta[name="csrf-token"]').attr('content'); 
+
+            var data = {
+                  ruta: rutaSeleccionada,
+                  empresa: empresaactual,
+                  fechaida: fechaida,
+                  fechavuelta: fechavuelta,
+                  busSelect: busSelect,
+                  conductor1: conductor1,
+                  conductor2: conductor2,
+                  auxiliar: auxiliar,
+                  selectedDataIda: arrayDatosIda,
+                  selectedDataVuelta: arrayDatosVuelta,
+                  _token: $('meta[name="csrf-token"]').attr('content')
+            };
+
+            $.ajax({
+              url: "{{ route('updateservice') }}",
+              method: 'post',
+              data: data,
+              contentType: 'application/x-www-form-urlencoded',
+              
+              
+              success: function(data) {
+
+                
+                $("#miModal").modal("hide");  
+                arrayDatosVuelta.splice(0, arrayDatosVuelta.length);
+                arrayDatosIda.splice(0, arrayDatosIda.length);
+
+                
+                if (data.guardado === 1) {
+                    $("#updated").modal("show");
+                }
+                else{
+                    $("#updatederror").modal("show");
+                }
+                
+              },
+              
+              error: function(error) {
+                console.error('Error:', error);
+              }
+            
+            });
+          
+          
+          });
 
 });
 

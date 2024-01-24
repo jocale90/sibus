@@ -8,6 +8,7 @@ use App\Models\Conductores_a;
 use App\Models\Buses;
 use App\Models\Rutas;
 use App\Models\Infosibus;
+use App\Models\Vp_servicios;
 use App\Models\User;
 use App\Models\sib_empresas_buses;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Laravel\Ui\Presets\React;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
 
 class RotativosController extends Controller
 {
@@ -75,8 +77,6 @@ class RotativosController extends Controller
         $fechaVuelta = $request->get("fechavuelta");
         $viajecorto  = 0;
 
-        /* dd($ruta,$empresa,$fechaIda,$fechaVuelta); */
-
         $rutas_ida    = DB::select("SELECT * FROM [dbo].[sib_listado_servicio_rotativa](?, ?, ?, ?)", array($fechaIda, $fechaVuelta, $ruta, $empresa));
         $rutas_vuelta = DB::select("SELECT * FROM [dbo].[sib_listado_servicio_rotativa_vuelta](?, ?, ?, ?)", array($fechaIda, $fechaVuelta, $ruta, $empresa));
 
@@ -100,8 +100,9 @@ class RotativosController extends Controller
     {
         
         Session::flush();
-        $url = "http://ec2-18-118-186-207.us-east-2.compute.amazonaws.com/nova/login";
+        $url = env('APP_URL') . 'nova/logout';
         return Redirect::to($url);
 
     }
+
 }
